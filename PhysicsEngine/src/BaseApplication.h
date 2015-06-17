@@ -1,68 +1,31 @@
+/********************************************************************************/
+/* [File]: BaseApplication.h													*/
+/* [Description]: */
+/* */
+/* [Author]: Tommaso Galatolo tommaso.galatolo@gmail.com						*/
+/* [Date]: 5/6/2015																*/
+/* [License]:																	*/
+/* This program is free software: you can redistribute it and/or modify			*/
+/* it under the terms of the GNU Lesser General Public License as published by	*/
+/* the Free Software Foundation, either version 3 of the License, or			*/
+/* (at your option) any later version.											*/
+/*																				*/
+/* This program is distributed in the hope that it will be useful,				*/
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of				*/
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the				*/
+/* GNU Lesser General Public License for more details.							*/
+/*																				*/
+/* You should have received a copy of the GNU Lesser General Public License		*/
+/* along with this program.  If not, see <http://www.gnu.org/licenses/>.		*/
+/********************************************************************************/
 #ifndef _BASEAPPLICATION_H_
 #define _BASEAPPLICATION_H_
-//Lib
+//Libs
 #include "UsedLibs.h"
-//GLFW
 #include "Camera.h"
-//#include <AntTweakBar.h>
 
 #ifdef _DEBUG
 #endif
-
-//class Bar
-//{
-//private:
-//	//Map of the tweek bars
-//	map<const char*, TwBar*> m_mpTweekBar;
-//	template <typename T>
-//	struct TypeToTW
-//	{
-//		static const TwType value{ TW_TYPE_UNDEF };
-//	};
-//
-//	template <>	struct TypeToTW<int> { static const TwType value{ TW_TYPE_INT32 }; };
-//	template <>	struct TypeToTW<bool> { static const TwType value{ TW_TYPE_BOOLCPP }; };
-//	template <>	struct TypeToTW<float> { static const TwType value{ TW_TYPE_FLOAT }; };
-//	template <>	struct TypeToTW<double> { static const TwType value{ TW_TYPE_DOUBLE }; };
-//
-//public:
-//	Bar() {}
-//	~Bar() {}
-//
-//	//AntTweakBar initialise funcs
-//	void InitTweek();
-//
-//	void CreateBar(const char* a_sNewBarName);
-//	TwBar* GetMappedBar(const char* a_sBarName);
-//
-//	void DrawTweek();
-//	void CleanUpTweek();
-//	void ScaleTweek(int a_iWidth, int a_iHeight);
-//
-//	template<typename T>
-//	inline void AddR_WTweak(const char* a_pccDivisor, const char* a_pccName, T a_Var, const char* a_pccDefinition)
-//	{
-//		TwBar* _currBar = m_mpTweekBar[a_pccDivisor];
-//		if (!TwAddVarRW(_currBar, a_pccName, TypeToTW<T>::value, &a_Var, a_pccDefinition))
-//		{
-//			printf("This might be an error... fuck this AntTweakBar thingy!");
-//		}
-//		else
-//		{
-//			printf("OK it might be somewhere else...");
-//		}
-//	}
-//	template<typename T>
-//	inline void AddR_OVar(const char* a_pccDivisor, const char* a_pccName, T a_Var, const char* a_pccDefinition)
-//	{
-//		TwAddVarRO(m_mpTweekBar[a_pccDivisor], a_pccName, TypeToTW<T>::value, &a_Var, a_pccDefinition);
-//	}
-//
-//	void AddTweakColor3f(const char* a_pccDivisor, const char* a_pccName, vec3 a_vCol, const char* a_pccDefinition);
-//	void AddTweakColor4f(const char* a_pccDivisor, const char* a_pccName, vec4 a_vCol, const char* a_pccDefinition);
-//
-//	void AddTweakDir3f(const char* a_pccDivisor, const char* a_pccName, vec3 a_vDir, const char* a_pccDefinition);
-//};
 
 namespace App
 {

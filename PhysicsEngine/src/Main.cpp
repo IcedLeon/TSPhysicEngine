@@ -33,10 +33,17 @@
 /* You should have received a copy of the GNU Lesser General Public License		*/
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>.		*/
 /********************************************************************************/
-#include "PhysicsEngine.h"
+#include "Engine.h"
 
 int main()
 {
+	Engine* _app = new Engine();
+
+	_app->Init(_app, vec3(0, 0, 0), ivec2(0, 720), "TEST", false);
+
+	_app->RunApp();
+
+	_app = nullptr;
 
 	return 0;
 }

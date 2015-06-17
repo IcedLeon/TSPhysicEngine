@@ -22,8 +22,12 @@
 #ifndef _PHYSICSENGINE_H_
 #define _PHYSICSENGINE_H_
 
+#include "UsedLibs.h"
+
 #include "BaseApplication.h"
 
 #include "Camera.h"
+
+#include "Precision.h"
 
 #endif //!_PHYSICSENGINE_H_

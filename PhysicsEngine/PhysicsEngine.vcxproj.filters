@@ -49,13 +49,43 @@
     <Filter Include="Header Files\Physx Engine\Math">
       <UniqueIdentifier>{b01fb061-d643-4fb8-a8ac-d81df42a9931}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering Engine\Debug">
+      <UniqueIdentifier>{62f2d14d-4892-4478-909b-7e7a181d36ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Debug">
+      <UniqueIdentifier>{de98fe96-93c1-49bd-8c48-dc3a2047e363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering Engine\Cameras">
+      <UniqueIdentifier>{f1995b2b-fff2-45ff-8ac3-cd8053623679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Cameras">
+      <UniqueIdentifier>{25370bad-11a4-406b-873c-d8035731cd80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physx Engine\Collision">
+      <UniqueIdentifier>{0c496419-1295-42c1-b104-a2b9ce4642b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering Engine\Primitives">
+      <UniqueIdentifier>{5e9cd27d-9c6e-4530-825d-8de984809750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering Engine\GLSL">
+      <UniqueIdentifier>{f8a560cf-8c04-42f2-be8d-682a67f14913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Primitives">
+      <UniqueIdentifier>{5ee088e7-6189-4b35-89a0-7bbc70ff9471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physx Engine\Collision">
+      <UniqueIdentifier>{e5f6edc5-bf03-47b3-bd94-d4b215c42e31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\GLSL">
+      <UniqueIdentifier>{7e87a7c0-91e8-45ab-8c02-0c5f7296a6d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physx Engine\Math">
+      <UniqueIdentifier>{ebb50e0c-fe94-4c06-aa4d-09426646de10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>Source Files\Rendering Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\BaseApplication.cpp">
       <Filter>Source Files\Rendering Engine\Abstract</Filter>
@@ -69,11 +99,59 @@
     <ClCompile Include="src\PhxTiming.cpp">
       <Filter>Source Files\Physx Engine\Timing</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>Source Files\Physx Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Bar.cpp">
+      <Filter>Source Files\Rendering Engine\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files\Rendering Engine\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AxisAlignedBoundingBox.cpp">
+      <Filter>Source Files\Physx Engine\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AxisAlignedBox.cpp">
+      <Filter>Source Files\Physx Engine\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BoundingSphere.cpp">
+      <Filter>Source Files\Physx Engine\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseShape.cpp">
+      <Filter>Source Files\Rendering Engine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderProgram.cpp">
+      <Filter>Source Files\Rendering Engine\GLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShapeFactory.cpp">
+      <Filter>Source Files\Rendering Engine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShapeManager.cpp">
+      <Filter>Source Files\Rendering Engine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shapes.cpp">
+      <Filter>Source Files\Rendering Engine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sphere.cpp">
+      <Filter>Source Files\Rendering Engine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureLoader.cpp">
+      <Filter>Source Files\Rendering Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ViewFrustum.cpp">
+      <Filter>Source Files\Rendering Engine\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Plane.cpp">
+      <Filter>Source Files\Physx Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QuatCamera.cpp">
+      <Filter>Source Files\Rendering Engine\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OrthoCamera.cpp">
+      <Filter>Source Files\Rendering Engine\Cameras</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Camera.h">
-      <Filter>Header Files\Rendering Engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\BaseApplication.h">
       <Filter>Header Files\Rendering Engine\Abstract</Filter>
     </ClInclude>
@@ -100,6 +178,78 @@
     </ClInclude>
     <ClInclude Include="src\Precision.h">
       <Filter>Header Files\Physx Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Bar.h">
+      <Filter>Header Files\Rendering Engine\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Header Files\Rendering Engine\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ViewFrustum.h">
+      <Filter>Header Files\Rendering Engine\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AxisAlignedBoundingBox.h">
+      <Filter>Header Files\Physx Engine\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AxisAlignedBox.h">
+      <Filter>Header Files\Physx Engine\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BoundingSphere.h">
+      <Filter>Header Files\Physx Engine\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BaseShape.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GridPlaneShape.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DomeShape.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CylinderShape.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CubeShape.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ConeShape.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MappedKeyValue.h">
+      <Filter>Header Files\Rendering Engine\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureLoader.h">
+      <Filter>Header Files\Rendering Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShapeFactory.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TorusShape.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShapeManager.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shapes.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sphere.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SphereShape.h">
+      <Filter>Header Files\Rendering Engine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderProgram.h">
+      <Filter>Header Files\Rendering Engine\GLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QuatCamera.h">
+      <Filter>Header Files\Rendering Engine\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Plane.h">
+      <Filter>Header Files\Physx Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OrthoCamera.h">
+      <Filter>Header Files\Rendering Engine\Cameras</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

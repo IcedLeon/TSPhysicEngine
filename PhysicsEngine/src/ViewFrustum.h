@@ -1,7 +1,7 @@
 /********************************************************************************/
-/* [File]: UsedLibs.h															*/
-/* [Description]: The propouse of this class is to wrap,						*/
-/* all the current dependency of the MS to be extended to the whole project.	*/
+/* [File]: ViewFrustum.h														*/
+/* [Description]: */
+/* */
 /* [Author]: Tommaso Galatolo tommaso.galatolo@gmail.com						*/
 /* [Date]: 5/6/2015																*/
 /* [License]:																	*/
@@ -18,41 +18,50 @@
 /* You should have received a copy of the GNU Lesser General Public License		*/
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>.		*/
 /********************************************************************************/
-#ifndef _USEDLIBS_H_
-#define _USEDLIBS_H_
+#ifndef _VIEWFRUSTUM_H_
+#define _VIEWFRUSTUM_H_
+//Libs
+#include "UsedLibs.h"
+#include "Plane.h"
+#include "BoundingSphere.h"
 
-//MS
-#include <algorithm>
-#include <cstdint>
-#include <map>
-using std::map;
-#include <memory>
-#include <string>
-using std::string;
-#include <vector>
-using std::vector;
-//GL
-#include "gl_core_4_4.h"
-#define GLM_SWIZZLE
-#include "glm\glm\glm.hpp"
-#include "glm\glm\ext.hpp"
-#include "glm\glm\gtc\matrix_transform.hpp"
-using glm::ivec2;
-using glm::ivec3;
-using glm::vec2;
-using glm::vec3;
-using glm::vec4;
-using glm::mat3;
-using glm::mat4;
-using glm::quat;
-using glm::lookAt;
-using glm::radians;
-using glm::normalize;
-using glm::dot;
-using glm::cross;
-//GLFW
-#include <glfw\include\GLFW\glfw3.h>
-//Macros
-#define MAX_KEYS	1024
+class Camera;
+class QuatCamera;
 
-#endif //!_USEDLIBS_H_
+typedef enum frustum_sides
+{
+	NEAR_PLANE,
+	FAR_PLANE,
+	LEFT_PLANE,
+	RIGHT_PLANE,
+	BOTTOM_PLANE,
+	TOP_PLANE
+} FrustumSides;
+
+class ViewFrustum
+{
+private:
+	static Plane m_oSides_NDC[6];
+	Plane m_oSides[6];
+	vector<vec4> m_oFrustumPoints;
+	std::int32_t m_iSections;
+
+public:
+	ViewFrustum();
+	ViewFrustum(const ViewFrustum& a_oSrc);
+	virtual ~ViewFrustum();
+
+	void TransformToWorldSpace(const Camera& a_oCurrCamera);
+	void TransformToWorldSpace(const QuatCamera& a_oCurrCamera);
+
+	bool IsVisible(const BoundingSphere& a_oBoundingSphere) const;
+
+	void SetNumOfSections(std::int32_t a_iSections);
+
+	std::int32_t GetNumberOfSections() const;
+
+	const vector<vec4>& GetFrustumPoints() const;
+
+};
+
+#endif //!_VIEWFRUSTUM_H_

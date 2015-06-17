@@ -1,7 +1,7 @@
 /********************************************************************************/
-/* [File]: UsedLibs.h															*/
-/* [Description]: The propouse of this class is to wrap,						*/
-/* all the current dependency of the MS to be extended to the whole project.	*/
+/* [File]: OrthoCamera.h														*/
+/* [Description]: */
+/* */
 /* [Author]: Tommaso Galatolo tommaso.galatolo@gmail.com						*/
 /* [Date]: 5/6/2015																*/
 /* [License]:																	*/
@@ -18,41 +18,33 @@
 /* You should have received a copy of the GNU Lesser General Public License		*/
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>.		*/
 /********************************************************************************/
-#ifndef _USEDLIBS_H_
-#define _USEDLIBS_H_
+#ifndef _ORTHOCAMERA_H_
+#define _ORTHOCAMERA_H_
+//Libs
+#include "QuatCamera.h"
 
-//MS
-#include <algorithm>
-#include <cstdint>
-#include <map>
-using std::map;
-#include <memory>
-#include <string>
-using std::string;
-#include <vector>
-using std::vector;
-//GL
-#include "gl_core_4_4.h"
-#define GLM_SWIZZLE
-#include "glm\glm\glm.hpp"
-#include "glm\glm\ext.hpp"
-#include "glm\glm\gtc\matrix_transform.hpp"
-using glm::ivec2;
-using glm::ivec3;
-using glm::vec2;
-using glm::vec3;
-using glm::vec4;
-using glm::mat3;
-using glm::mat4;
-using glm::quat;
-using glm::lookAt;
-using glm::radians;
-using glm::normalize;
-using glm::dot;
-using glm::cross;
-//GLFW
-#include <glfw\include\GLFW\glfw3.h>
-//Macros
-#define MAX_KEYS	1024
+class OrthoCamera : public QuatCamera
+{
+public:
+	OrthoCamera(const string& a_sName);
+	OrthoCamera(const OrthoCamera& a_oSrc);
+	virtual ~OrthoCamera();
 
-#endif //!_USEDLIBS_H_
+	virtual void UpdateProjection();
+
+	virtual float GetNearWidth() const;
+
+	virtual float GetNearHeight() const;
+
+	virtual float GetFarWidth() const;
+
+	virtual float GetFarHeight() const;
+
+	void Orthografic(const vec2& a_vViewport, float a_fZNear, float a_fZFar);
+
+	void Orthografic(float a_fWidth, float a_fHeight, float a_fZNear, float a_fZFar);
+
+	void AdjustFrustum(const ViewFrustum& a_oViewFrustum, std::int32_t a_iSections, const vec4& a_vLightPos, const quat& a_qLightRot);
+};
+
+#endif //!_ORTHOCAMERA_H_

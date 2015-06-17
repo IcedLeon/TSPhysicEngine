@@ -1,66 +1,5 @@
 #include "BaseApplication.h"
 
-/////////////////////////////////
-//			TweekBar			//
-/////////////////////////////////
-//void Bar::InitTweek()
-//{
-//	//if (TwInit(TW_OPENGL, NULL))
-//	//	printf("-- ANTTWEEKBAR INIT SUCCESSFULLY. \n");
-//	//else
-//	//	fprintf(stderr, "%s");
-//}
-//
-//void Bar::CreateBar(const char* a_sNewBarName)
-//{
-//	m_mpTweekBar[a_sNewBarName] = TwNewBar(a_sNewBarName);
-//}
-//
-//TwBar* Bar::GetMappedBar(const char* a_sBarName)
-//{
-//	//Checks if the bar has been mapped.
-//	if (m_mpTweekBar.find(a_sBarName) != m_mpTweekBar.end())
-//	{
-//		return m_mpTweekBar[a_sBarName];
-//	}
-//	else
-//	{
-//		printf("ERROR: <COULD NOT FIND '%s' BAR FROM THE MAP. CHECK IF BAR HAS BEEN INIT BEFORE> \n", a_sBarName);
-//		return nullptr;
-//	}
-//}
-//
-//void Bar::DrawTweek()
-//{
-//	TwDraw();
-//}
-//
-//void Bar::CleanUpTweek()
-//{
-//	TwDeleteAllBars();
-//	TwTerminate();
-//}
-//
-//void Bar::ScaleTweek(int a_iWidth, int a_iHeight)
-//{
-//	TwWindowSize(a_iWidth, a_iHeight);
-//}
-//
-//void Bar::AddTweakColor3f(const char* a_pccDivisor, const char* a_pccName, vec3 a_vCol, const char* a_pccDefinition)
-//{
-//	TwAddVarRW(m_mpTweekBar[a_pccDivisor], a_pccName, TW_TYPE_COLOR3F, &a_vCol, a_pccDefinition);
-//}
-//
-//void Bar::AddTweakColor4f(const char* a_pccDivisor, const char* a_pccName, vec4 a_vCol, const char* a_pccDefinition)
-//{
-//	TwAddVarRW(m_mpTweekBar[a_pccDivisor], a_pccName, TW_TYPE_COLOR4F, &a_vCol, a_pccDefinition);
-//}
-//
-//void Bar::AddTweakDir3f(const char* a_pccDivisor, const char* a_pccName, vec3 a_vDir, const char* a_pccDefinition)
-//{
-//	TwAddVarRW(m_mpTweekBar[a_pccDivisor], a_pccName, TW_TYPE_DIR3F, &a_vDir, a_pccDefinition);
-//}
-
 namespace App
 {
 
@@ -171,14 +110,14 @@ namespace App
 
 	void APIENTRY BaseApplication::debug_callback(GLenum a_eSource, GLenum a_eType, GLuint a_uiID, GLenum a_eSeverity, GLsizei a_siLength, const GLchar* a_pccMsg, const GLvoid* a_pcvParam)
 	{
-		//reinterpret_cast<BaseApplication*>(a_pcvParam)->OnDebugMessage(a_eSource, a_eType, a_uiID, a_eSeverity, a_siLength, a_pccMsg, a_pcvParam);
 		m_oApp->GetGLError(a_eSource, a_eType, a_uiID, a_eSeverity, a_pccMsg);
 	}
 
 	void BaseApplication::OnResize(GLint a_iWidth, GLint a_iHeight)
 	{
 		this->m_oApp->APPINFO.m_viWinSize = ivec2(a_iWidth, a_iHeight);
-		this->m_oApp->DATA.TRANSFORM.m_mProjection = this->m_oApp->DATA.m_oCurrCamera->GetProjectionTransform(this->APPINFO.m_viWinSize);
+		this->m_oApp->DATA.m_oCurrCamera->SetReferenceOfScreen(vec2((GLfloat)a_iWidth, (GLfloat)a_iHeight));
+		this->m_oApp->DATA.TRANSFORM.m_mProjection = this->m_oApp->DATA.m_oCurrCamera->GetProjection();
 	}
 
 	void BaseApplication::GetGLError(GLenum a_eSource, GLenum a_eType, GLuint a_uiID,
@@ -262,14 +201,24 @@ namespace App
 		default:
 			_sevStr = "UNKNOWN";
 		}
-#define FORMAT_GL_ERROR_MSG "<OpenGL Error>: %s.\n[Source]:%s\n[Type]:%s\n[Severity]:%s\n[ID]:%d.\n"
+#define FORMAT_GL_ERROR_MSG "<OpenGL Message>: %s\n[Source]: %s\n[Type]: %s\n[Severity]: %s\n[ID]: %d.\n"
 		printf(FORMAT_GL_ERROR_MSG, a_pccMsg, _sourceString.c_str(), _typeStr.c_str(), _sevStr.c_str(),
 			a_uiID);
 	}
 
 	void BaseApplication::Shutdown()
 	{
-		delete this->m_oApp->APPINFO.m_pccTitle;
+		if (!this->m_oApp->DATA.m_oTotalCameras.empty())
+		{
+			auto _walker = this->m_oApp->DATA.m_oTotalCameras.begin();
+			while (_walker != this->m_oApp->DATA.m_oTotalCameras.end())
+			{
+				delete _walker->second;
+				_walker++;
+			}
+			this->m_oApp->DATA.m_oTotalCameras.clear();
+		}
+		this->m_oApp->DATA.m_oCurrCamera = nullptr;
 		//this->m_oApp->DATA.m_oTweeking->CleanUpTweek();
 		glfwDestroyWindow(this->DATA.m_oWin);
 		glfwTerminate();
@@ -280,7 +229,11 @@ namespace App
 	void BaseApplication::CreateCamera(vec3 a_vCamPos)
 	{
 		static int _camID = 1; //Camera 0 is always the main one
-		Camera* _newCamera = new Camera();
+
+		Camera* _newCamera = new Camera(
+			vec2(this->m_oApp->APPINFO.m_viWinSize.x, 
+			this->m_oApp->APPINFO.m_viWinSize.y));
+		
 		_newCamera->BuildCamera(a_vCamPos);
 
 		this->m_oApp->DATA.m_oTotalCameras[_camID] = _newCamera;
@@ -314,9 +267,9 @@ namespace App
 		if (!glfwInit())
 		{
 #ifdef _DEBUG
-			printf("ERROR: <CANNOT INITIALIZE WINDOW. glfwInit() has fail initialization. %s\n");
+			printf("<ERROR>: CANNOT INITIALIZE GLFW. glfwInit() has fail initialization.\n");
 #endif //!_DEBUG
-			fprintf(stderr, "<ERROR>: CANNOT INITIALIZE WINDOW. glfwInit() has fail initialization.\n");
+			fprintf(stderr, "<ERROR>: CANNOT INITIALIZE GLFW. glfwInit() has fail initialization.\n");
 			exit(EXIT_FAILURE);
 		}
 		else
@@ -328,9 +281,9 @@ namespace App
 		{
 			glfwTerminate();
 #ifdef _DEBUG
-			printf("<ERROR>: Window could not be intialize, glfwCreateWindow() has fail. %s\n");
+			printf("<ERROR>: Window has not be intialized, glfwCreateWindow() has fail.\n");
 #endif //!_DEBUG
-			fprintf(stderr, "<ERROR>: Window could not be intialize, glfwCreateWindow() has fail. %s\n");
+			fprintf(stderr, "<ERROR>: Window has not be intialized, glfwCreateWindow() has fail. %s\n");
 			exit(EXIT_FAILURE);
 		}
 		else
@@ -357,7 +310,7 @@ namespace App
 
 #define RES_COUNT 21
 
-#define RESIZE_WARNING "<WARNING>: Your resolution: %d x %d, has been changed because it di not conform to any standard resolution. \n"
+#define RESIZE_WARNING "<WARNING>: Your resolution has been changed to: %d x %d, because it did not conform to any standard resolution.\n"
 		
 		//Somehow this window hint is causing the glfwCreateWindow func to fail window creation.
 		//I should investigate further once the assigment is over.
@@ -371,312 +324,156 @@ namespace App
 		GLFWmonitor* _primatyMon = glfwGetPrimaryMonitor();
 
 		const GLFWvidmode* _modes = glfwGetVideoMode(_primatyMon);
+		//Simple lambda func to determine if the number is even or not.
+		auto _even = [](unsigned int n){ return (n % 2 == 0) ? n : (n + 1); };
+		//Return a value if the number is even.
+		auto _isEven_ = [](unsigned int n){return (n % 2 == 0) ? true : false; };
+
+		unsigned int _idx = 0;
+		unsigned int _nextIdx = 0;
+		static unsigned int _prevIdx = 99;
+		bool _found = false;
+
+		if (this->m_oApp->APPINFO.m_viWinSize.x == 0 && this->m_oApp->APPINFO.m_viWinSize.y == 0)
+		{
+			if ((_resolutionTable[20] < _modes->width) && (_resolutionTable[21] < _modes->height))
+			{
+				this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
+				_found = !_found;
+			}
+
+			if (!_found)
+			{
+				for (unsigned int i = 0; i < RES_COUNT; ++i)
+				{
+					if (_prevIdx != i)
+					{
+						_idx = _even(i);
+						_nextIdx = _idx + 1;
+					}
+					else
+						continue;
+
+					if ((_resolutionTable[_idx] == _modes->width) && (_resolutionTable[_nextIdx] == _modes->height))
+					{
+						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[_idx], _resolutionTable[_nextIdx]);
+						_found = !_found;
+					}
+
+					if (!_found && !_isEven_(i))
+					{
+						_prevIdx = _idx;
+					}
+					if (_found)
+					{
+						printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
+						break;
+					}
+				}
+			}
+		}
+		else if (this->m_oApp->APPINFO.m_viWinSize.x <= 0 && this->m_oApp->APPINFO.m_viWinSize.y > 0)
+		{
+			if ((_resolutionTable[20] < _modes->width) && (_resolutionTable[21] < _modes->height))
+			{
+				this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
+				_found = !_found;
+			}
+
+			if (!_found)
+			{
+				for (unsigned int i = 0; i < RES_COUNT; ++i)
+				{
+					if (_prevIdx != i)
+					{
+						_idx = _even(i);
+						_nextIdx = _idx + 1;
+					}
+					else
+						continue;
+
+					if (this->m_oApp->APPINFO.m_viWinSize.y == _resolutionTable[_nextIdx])
+					{
+						this->m_oApp->APPINFO.m_viWinSize.x = _resolutionTable[_idx];
+						_found = !_found;
+					}
+
+					if (!_found && !_isEven_(i))
+					{
+						_prevIdx = _idx;
+					}
+					if (_found)
+					{
+						printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
+						break;
+					}
+				}
+			}
+		}
+		else if (this->m_oApp->APPINFO.m_viWinSize.y <= 0 && this->m_oApp->APPINFO.m_viWinSize.x > 0)
+		{
+			if ((_resolutionTable[20] < _modes->width) && (_resolutionTable[21] < _modes->height))
+			{
+				this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
+				_found = !_found;
+			}
+
+			if (!_found)
+			{
+				for (unsigned int i = 0; i < RES_COUNT; ++i)
+				{
+					if (_prevIdx != i)
+					{
+						_idx = _even(i);
+						_nextIdx = _idx + 1;
+					}
+					else
+						continue;
+
+					if (this->m_oApp->APPINFO.m_viWinSize.x == _resolutionTable[_idx])
+					{
+						this->m_oApp->APPINFO.m_viWinSize.y = _resolutionTable[_nextIdx];
+						_found = !_found;
+					}
+
+					if (!_found && !_isEven_(i))
+					{
+						_prevIdx = _idx;
+					}
+					if (_found)
+					{
+						printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
+						break;
+					}
+				}
+			}
+		}
+
+		if (!_found)
+		{
+			printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
+			this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[10], _resolutionTable[11]);
+		}
 
 		if (this->m_oApp->APPINFO.Flags.m_uiFullScreen)
 		{
-			if (this->m_oApp->APPINFO.m_viWinSize.x == 0 && this->m_oApp->APPINFO.m_viWinSize.y == 0)
-			{
-				unsigned int _idx = 0;
-				unsigned int _nextIdx = 0;
-				bool _found = false;
-				for (unsigned int i = 0; i < RES_COUNT; ++i)
-				{
-					_idx += i;
-					_nextIdx += _idx + 1;
-					if ((_resolutionTable[_idx] == _modes->width) && (_resolutionTable[_nextIdx] == _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[_idx], _resolutionTable[_nextIdx]);
-						_found = !_found;
-					}
-					else if ((_resolutionTable[0] <= _modes->width) && (_resolutionTable[1] <= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[0], _resolutionTable[1]);
-						_found = !_found;
-					}
-					else if ((_resolutionTable[20] >= _modes->width) && (_resolutionTable[21] >= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
-						_found = !_found;
-					}
 
-					if (!_found)
-					{
-						++_idx;
-						continue;
-					}
-					else
-						break;
-				}
-
-				if (!_found)
-				{
-					printf(RESIZE_WARNING, this->APPINFO.m_viWinSize.x, this->APPINFO.m_viWinSize.y);
-					this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[10], _resolutionTable[11]);
-				}
-
-				this->m_oApp->DATA.m_oWin = glfwCreateWindow(
-					this->m_oApp->APPINFO.m_viWinSize.x,
-					this->m_oApp->APPINFO.m_viWinSize.y,
-					this->m_oApp->APPINFO.m_pccTitle,
-					_primatyMon,
-					nullptr);
-			}
-			else if (this->m_oApp->APPINFO.m_viWinSize.x <= 0 && this->m_oApp->APPINFO.m_viWinSize.y > 0)
-			{
-				unsigned int _idx = 0;
-				bool _found = false;
-				for (unsigned int i = 0; i < RES_COUNT; ++i)
-				{
-					_idx += i;
-					if ((_resolutionTable[_idx] == _modes->width) && (this->m_oApp->APPINFO.m_viWinSize.y == _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize.x = _resolutionTable[_idx];
-						_found = !_found;
-					}
-					else if ((_resolutionTable[0] <= _modes->width) && (this->m_oApp->APPINFO.m_viWinSize.y <= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[0], _resolutionTable[1]);
-						_found = !_found;
-					}
-					else if ((_resolutionTable[20] >= _modes->width) && (this->m_oApp->APPINFO.m_viWinSize.y >= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
-						_found = !_found;
-					}
-
-					if (!_found)
-					{
-						++_idx;
-						continue;
-					}
-					else
-						break;
-				}
-
-				if (!_found)
-				{
-					this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[10], _resolutionTable[11]);
-					printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
-				}
-
-				this->m_oApp->DATA.m_oWin = glfwCreateWindow(
-					this->m_oApp->APPINFO.m_viWinSize.x,
-					this->m_oApp->APPINFO.m_viWinSize.y,
-					this->m_oApp->APPINFO.m_pccTitle,
-					_primatyMon,
-					nullptr);
-			}
-			else if (this->m_oApp->APPINFO.m_viWinSize.y <= 0 && this->m_oApp->APPINFO.m_viWinSize.x > 0)
-			{
-				unsigned int _idx = 0;
-				unsigned int _nextIdx = 0;
-				bool _found = false;
-				for (unsigned int i = 0; i < RES_COUNT; ++i)
-				{
-					_idx += i;
-					_nextIdx += _idx + 1;
-					if ((this->m_oApp->APPINFO.m_viWinSize.x == _modes->width) && (_resolutionTable[_nextIdx] == _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize.y = _resolutionTable[_nextIdx];
-						_found = !_found;
-					}
-					else if ((this->m_oApp->APPINFO.m_viWinSize.x <= _modes->width) && (_resolutionTable[1] <= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[0], _resolutionTable[1]);
-						_found = !_found;
-					}
-					else if ((this->m_oApp->APPINFO.m_viWinSize.x >= _modes->width) && (_resolutionTable[21] >= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
-						_found = !_found;
-					}
-
-					if (!_found)
-					{
-						++_idx;
-						continue;
-					}
-					else
-						break;
-				}
-
-				if (!_found)
-				{
-					printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
-					this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[10], _resolutionTable[11]);
-				}
-
-				this->m_oApp->DATA.m_oWin = glfwCreateWindow(
-					this->m_oApp->APPINFO.m_viWinSize.x,
-					this->m_oApp->APPINFO.m_viWinSize.y,
-					this->m_oApp->APPINFO.m_pccTitle,
-					_primatyMon,
-					nullptr);
-
-			}
-			else
-			{
-				this->m_oApp->DATA.m_oWin = glfwCreateWindow(
-					this->m_oApp->APPINFO.m_viWinSize.x,
-					this->m_oApp->APPINFO.m_viWinSize.y,
-					this->m_oApp->APPINFO.m_pccTitle,
-					_primatyMon,
-					nullptr);
-			}
+			this->m_oApp->DATA.m_oWin = glfwCreateWindow(
+				this->m_oApp->APPINFO.m_viWinSize.x,
+				this->m_oApp->APPINFO.m_viWinSize.y,
+				this->m_oApp->APPINFO.m_pccTitle,
+				_primatyMon,
+				nullptr);
 		}
 		else
 		{
-			if (this->m_oApp->APPINFO.m_viWinSize.x == 0 && this->m_oApp->APPINFO.m_viWinSize.y == 0)
-			{
-				unsigned int _idx = 0;
-				unsigned int _nextIdx = 0;
-				bool _found = false;
-				for (unsigned int i = 0; i < RES_COUNT; ++i)
-				{
-					_idx += i;
-					_nextIdx += _idx + 1;
-					if ((_resolutionTable[_idx] == _modes->width) && (_resolutionTable[_nextIdx] == _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[_idx], _resolutionTable[_nextIdx]);
-						_found = !_found;
-					}
-					else if ((_resolutionTable[0] <= _modes->width) && (_resolutionTable[1] <= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[0], _resolutionTable[1]);
-						_found = !_found;
-					}
-					else if ((_resolutionTable[20] >= _modes->width) && (_resolutionTable[21] >= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
-						_found = !_found;
-					}
-
-					if (!_found)
-					{
-						++_idx;
-						continue;
-					}
-					else
-						break;
-				}
-
-				if (!_found)
-				{
-					printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
-					this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[10], _resolutionTable[11]);
-				}
-
-				this->m_oApp->DATA.m_oWin = glfwCreateWindow(
-					this->m_oApp->APPINFO.m_viWinSize.x,
-					this->m_oApp->APPINFO.m_viWinSize.y,
-					this->m_oApp->APPINFO.m_pccTitle,
-					nullptr,
-					nullptr);
-			}
-			else if (this->m_oApp->APPINFO.m_viWinSize.x <= 0 && this->m_oApp->APPINFO.m_viWinSize.y > 0)
-			{
-				unsigned int _idx = 0;
-				bool _found = false;
-				for (unsigned int i = 0; i < RES_COUNT; ++i)
-				{
-					_idx += i;
-					if ((_resolutionTable[_idx] == _modes->width) && (this->m_oApp->APPINFO.m_viWinSize.y == _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize.x = _resolutionTable[_idx];
-						_found = !_found;
-					}
-					else if ((_resolutionTable[0] <= _modes->width) && (this->m_oApp->APPINFO.m_viWinSize.y <= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[0], _resolutionTable[1]);
-						_found = !_found;
-					}
-					else if ((_resolutionTable[20] >= _modes->width) && (this->m_oApp->APPINFO.m_viWinSize.y >= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
-						_found = !_found;
-					}
-
-					if (!_found)
-					{
-						++_idx;
-						continue;
-					}
-					else
-						break;
-				}
-
-				if (!_found)
-				{
-					this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[10], _resolutionTable[11]);
-					printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
-				}
-
-				this->m_oApp->DATA.m_oWin = glfwCreateWindow(
-					this->m_oApp->APPINFO.m_viWinSize.x,
-					this->m_oApp->APPINFO.m_viWinSize.y,
-					this->m_oApp->APPINFO.m_pccTitle,
-					nullptr,
-					nullptr);
-			}
-			else if (this->m_oApp->APPINFO.m_viWinSize.y <= 0 && this->m_oApp->APPINFO.m_viWinSize.x > 0)
-			{
-				unsigned int _idx = 0;
-				unsigned int _nextIdx = 0;
-				bool _found = false;
-				for (unsigned int i = 0; i < RES_COUNT; ++i)
-				{
-					_idx += i;
-					_nextIdx += _idx + 1;
-					if ((this->m_oApp->APPINFO.m_viWinSize.x == _modes->width) && (_resolutionTable[_nextIdx] == _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize.y = _resolutionTable[_nextIdx];
-						_found = !_found;
-					}
-					else if ((this->m_oApp->APPINFO.m_viWinSize.x <= _modes->width) && (_resolutionTable[1] <= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[0], _resolutionTable[1]);
-						_found = !_found;
-					}
-					else if ((this->m_oApp->APPINFO.m_viWinSize.x >= _modes->width) && (_resolutionTable[21] >= _modes->height))
-					{
-						this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[20], _resolutionTable[21]);
-						_found = !_found;
-					}
-
-					if (!_found)
-					{
-						++_idx;
-						continue;
-					}
-					else
-						break;
-				}
-
-				if (!_found)
-				{
-					printf(RESIZE_WARNING, this->m_oApp->APPINFO.m_viWinSize.x, this->m_oApp->APPINFO.m_viWinSize.y);
-					this->m_oApp->APPINFO.m_viWinSize = ivec2(_resolutionTable[10], _resolutionTable[11]);
-				}
-
-				this->m_oApp->DATA.m_oWin = glfwCreateWindow(
-					this->m_oApp->APPINFO.m_viWinSize.x,
-					this->m_oApp->APPINFO.m_viWinSize.y,
-					this->m_oApp->APPINFO.m_pccTitle,
-					nullptr,
-					nullptr);
-
-			}
-			else
-			{
-				this->m_oApp->DATA.m_oWin = glfwCreateWindow(
-					this->m_oApp->APPINFO.m_viWinSize.x,
-					this->m_oApp->APPINFO.m_viWinSize.y,
-					this->m_oApp->APPINFO.m_pccTitle,
-					nullptr,
-					nullptr);
-			}
+			this->m_oApp->DATA.m_oWin = glfwCreateWindow(
+				this->m_oApp->APPINFO.m_viWinSize.x,
+				this->m_oApp->APPINFO.m_viWinSize.y,
+				this->m_oApp->APPINFO.m_pccTitle,
+				nullptr,
+				nullptr);
 		}
-		//delete _resolutionTable;
 		printf("--------------------------------------------------------------------------------");
 		printf("-- WINDOW INITIALIZED CORRECTLY. \n");
 		printf("--------------------------------------------------------------------------------");
@@ -720,7 +517,8 @@ namespace App
 			glfwSetFramebufferSizeCallback(this->m_oApp->DATA.m_oWin, framebuffer_size_callback);
 			printf("-- WINDOW_BUFFER_CALLBACK ENABLED. \n");
 			//
-			this->m_oApp->DATA.m_oCurrCamera = new Camera();
+			this->m_oApp->DATA.m_oCurrCamera = new Camera(vec2(this->m_oApp->APPINFO.m_viWinSize.x,
+				this->m_oApp->APPINFO.m_viWinSize.y));
 			this->m_oApp->DATA.m_oCurrCamera->BuildCamera(a_vCamPos);
 			this->m_oApp->DATA.m_oTotalCameras[0] = this->m_oApp->DATA.m_oCurrCamera;
 			printf("-- CAMERA BUILT SUCCESSFULLY. \n");
@@ -797,7 +595,7 @@ namespace App
 
 	void BaseApplication::EnableVsync(bool a_bVsyncEnable)
 	{
-		this->m_oApp->APPINFO.Flags.m_uiVSync = a_bVsyncEnable ? 1 : 0;
+		this->m_oApp->APPINFO.Flags.m_uiVSync = a_bVsyncEnable ? true : false;
 	}
 
 } //!namespace::App
