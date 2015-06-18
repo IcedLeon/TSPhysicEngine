@@ -82,6 +82,27 @@
     <Filter Include="Source Files\Physx Engine\Math">
       <UniqueIdentifier>{ebb50e0c-fe94-4c06-aa4d-09426646de10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering Engine\Lighting">
+      <UniqueIdentifier>{1d507e73-f1dc-43d2-b3cf-6e280e352c7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Lighting">
+      <UniqueIdentifier>{dd6560c6-05c4-4872-b1a8-f3330bbaed39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering Engine\Texture">
+      <UniqueIdentifier>{d36528b1-aca1-466f-980f-6f7549bda495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering Engine\Color">
+      <UniqueIdentifier>{244baba3-7783-49ad-b521-aa5a98f5a42e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Color">
+      <UniqueIdentifier>{a50bed87-250a-495a-af50-bdc183bd470d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physx Engine\Physics Body">
+      <UniqueIdentifier>{c19ab4b9-d3df-4ec5-b928-8732ccb966e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physx Engine\Physics Body">
+      <UniqueIdentifier>{08c2b801-511f-4162-b911-029674d01b30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -132,9 +153,6 @@
     <ClCompile Include="src\Shapes.cpp">
       <Filter>Source Files\Rendering Engine\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sphere.cpp">
-      <Filter>Source Files\Rendering Engine\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="src\TextureLoader.cpp">
       <Filter>Source Files\Rendering Engine</Filter>
     </ClCompile>
@@ -149,6 +167,18 @@
     </ClCompile>
     <ClCompile Include="src\OrthoCamera.cpp">
       <Filter>Source Files\Rendering Engine\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sphere.cpp">
+      <Filter>Source Files\Physx Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PerspectiveCamera.cpp">
+      <Filter>Source Files\Rendering Engine\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraManager.cpp">
+      <Filter>Source Files\Rendering Engine\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Color.cpp">
+      <Filter>Source Files\Rendering Engine\Color</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,9 +248,6 @@
     <ClInclude Include="src\MappedKeyValue.h">
       <Filter>Header Files\Rendering Engine\Abstract</Filter>
     </ClInclude>
-    <ClInclude Include="src\TextureLoader.h">
-      <Filter>Header Files\Rendering Engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\ShapeFactory.h">
       <Filter>Header Files\Rendering Engine\Primitives</Filter>
     </ClInclude>
@@ -231,9 +258,6 @@
       <Filter>Header Files\Rendering Engine\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\Shapes.h">
-      <Filter>Header Files\Rendering Engine\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sphere.h">
       <Filter>Header Files\Rendering Engine\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\SphereShape.h">
@@ -250,6 +274,36 @@
     </ClInclude>
     <ClInclude Include="src\OrthoCamera.h">
       <Filter>Header Files\Rendering Engine\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sphere.h">
+      <Filter>Header Files\Physx Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PerspectiveCamera.h">
+      <Filter>Header Files\Rendering Engine\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Singleton.h">
+      <Filter>Header Files\Rendering Engine\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CameraManager.h">
+      <Filter>Header Files\Rendering Engine\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Log.h">
+      <Filter>Header Files\Rendering Engine\Abstract</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light.h">
+      <Filter>Header Files\Rendering Engine\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureLoader.h">
+      <Filter>Header Files\Rendering Engine\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Color.h">
+      <Filter>Header Files\Rendering Engine\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CoreMath.h">
+      <Filter>Header Files\Physx Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhxParticle.h">
+      <Filter>Header Files\Physx Engine\Physics Body</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

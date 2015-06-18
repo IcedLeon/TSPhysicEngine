@@ -1,9 +1,9 @@
 /********************************************************************************/
-/* [File]: AxisAlignedBox.h														*/
+/* [File]: PerspectiveCamera.h													*/
 /* [Description]: */
 /* */
 /* [Author]: Tommaso Galatolo tommaso.galatolo@gmail.com						*/
-/* [Date]: 5/6/2015																*/
+/* [Date]: 18/6/2015															*/
 /* [License]:																	*/
 /* This program is free software: you can redistribute it and/or modify			*/
 /* it under the terms of the GNU Lesser General Public License as published by	*/
@@ -18,34 +18,41 @@
 /* You should have received a copy of the GNU Lesser General Public License		*/
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>.		*/
 /********************************************************************************/
-#ifndef _AXISALIGNEDBOX_H_
-#define _AXISALIGNEDBOX_H_
-//Lib
-#define GLM_SWIZZLE
-#include "glm\glm\glm.hpp"
-#include "glm\glm\ext.hpp"
+#ifndef _PERSPECTIVECAMERA_H_
+#define _PERSPECTIVECAMERA_H_
+//Libs
+#include "QuatCamera.h"
 
-class AxisAlignedBox
+class PerspectiveCamera : public QuatCamera
 {
-protected:
-	glm::vec4 m_vCenter;
-	float m_fHalfWidth;
-	float m_fHalfHeight;
-	float m_fHalfDepth;
-	
-public:
-	AxisAlignedBox();
-	AxisAlignedBox(const glm::vec4& a_vCenter, float a_fHalfWidth, float a_fHalfHeight, float a_fHalfDepth);
-	virtual	~AxisAlignedBox();
+private:
+	float	m_fFovX;
+	float	m_fFovY;
+	bool	m_bFovXDirty;
+	bool	m_bFovYDirty;
 
-	const glm::vec4& GetCenter() const;
-	void SetCenter(const glm::vec4& a_vCenter);
-	float GetHalfWidth() const;
-	void SetHalfWidth(float a_fHalfWidth);
-	float GetHalfHeight() const;
-	void SetHalfHeight(float a_fHalfHeight);
-	float GetHalfDepth() const;
-	void SetHalfDepth(float a_fHalfDepth);
+public:
+	PerspectiveCamera(const string& a_sName);
+	PerspectiveCamera(const PerspectiveCamera& a_oSrc);
+	virtual ~PerspectiveCamera();
+
+	virtual void UpdateProjection();
+
+	virtual float GetNearWidth() const;
+
+	virtual float GetNearHeight() const;
+
+	virtual float GetFarWidth() const;
+
+	virtual float GetFarHeight() const;
+
+	void Perspective(float a_fFovy, const vec2& a_vViewport, float a_fZNear, float a_fZFar);
+
+	void Perspective(float a_fFovy, float a_fWidth, float a_fHeight, float a_fZNear, float a_fZFar);
+
+	void SetFovX(float a_fFovX);
+
+	void SetFovY(float a_fFovY);
 };
 
-#endif //!_AXISALIGNEDBOX_H_
+#endif

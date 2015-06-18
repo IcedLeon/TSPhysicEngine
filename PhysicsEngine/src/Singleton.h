@@ -1,9 +1,9 @@
 /********************************************************************************/
-/* [File]: AxisAlignedBox.h														*/
+/* [File]: Singleton.h															*/
 /* [Description]: */
 /* */
 /* [Author]: Tommaso Galatolo tommaso.galatolo@gmail.com						*/
-/* [Date]: 5/6/2015																*/
+/* [Date]: 12/6/2015															*/
 /* [License]:																	*/
 /* This program is free software: you can redistribute it and/or modify			*/
 /* it under the terms of the GNU Lesser General Public License as published by	*/
@@ -18,34 +18,41 @@
 /* You should have received a copy of the GNU Lesser General Public License		*/
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>.		*/
 /********************************************************************************/
-#ifndef _AXISALIGNEDBOX_H_
-#define _AXISALIGNEDBOX_H_
-//Lib
-#define GLM_SWIZZLE
-#include "glm\glm\glm.hpp"
-#include "glm\glm\ext.hpp"
+#ifndef _SINGLETON_H_
+#define _SINGLETON_H_
 
-class AxisAlignedBox
+template<class S>
+class Singleton
 {
-protected:
-	glm::vec4 m_vCenter;
-	float m_fHalfWidth;
-	float m_fHalfHeight;
-	float m_fHalfDepth;
-	
-public:
-	AxisAlignedBox();
-	AxisAlignedBox(const glm::vec4& a_vCenter, float a_fHalfWidth, float a_fHalfHeight, float a_fHalfDepth);
-	virtual	~AxisAlignedBox();
+private:
+	static S* m_oInstance;
 
-	const glm::vec4& GetCenter() const;
-	void SetCenter(const glm::vec4& a_vCenter);
-	float GetHalfWidth() const;
-	void SetHalfWidth(float a_fHalfWidth);
-	float GetHalfHeight() const;
-	void SetHalfHeight(float a_fHalfHeight);
-	float GetHalfDepth() const;
-	void SetHalfDepth(float a_fHalfDepth);
+public:
+	Singleton() {}
+	virtual ~Singleton() {}
+
+	static S* GetInstance()
+	{
+		if (!m_oInstance)
+		{
+			m_oInstance = new S();
+		}
+
+		return m_oInstance;
+	}
+
+	static void Terminate()
+	{
+		if (m_oInstance)
+		{
+			delete m_oInstance;
+
+			m_oInstance = nullptr;
+		}
+	}
 };
 
-#endif //!_AXISALIGNEDBOX_H_
+template<class S>
+S* Singleton<S>::m_oInstance = nullptr;
+
+#endif //!_SINGLETON_H_

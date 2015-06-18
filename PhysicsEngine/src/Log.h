@@ -1,9 +1,9 @@
 /********************************************************************************/
-/* [File]: AxisAlignedBox.h														*/
+/* [File]: CameraManager.h														*/
 /* [Description]: */
 /* */
 /* [Author]: Tommaso Galatolo tommaso.galatolo@gmail.com						*/
-/* [Date]: 5/6/2015																*/
+/* [Date]: 12/6/2015															*/
 /* [License]:																	*/
 /* This program is free software: you can redistribute it and/or modify			*/
 /* it under the terms of the GNU Lesser General Public License as published by	*/
@@ -18,34 +18,10 @@
 /* You should have received a copy of the GNU Lesser General Public License		*/
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>.		*/
 /********************************************************************************/
-#ifndef _AXISALIGNEDBOX_H_
-#define _AXISALIGNEDBOX_H_
-//Lib
-#define GLM_SWIZZLE
-#include "glm\glm\glm.hpp"
-#include "glm\glm\ext.hpp"
+#ifndef _LOG_H_
+#define _LOG_H_
+#include <stdio.h>
 
-class AxisAlignedBox
-{
-protected:
-	glm::vec4 m_vCenter;
-	float m_fHalfWidth;
-	float m_fHalfHeight;
-	float m_fHalfDepth;
-	
-public:
-	AxisAlignedBox();
-	AxisAlignedBox(const glm::vec4& a_vCenter, float a_fHalfWidth, float a_fHalfHeight, float a_fHalfDepth);
-	virtual	~AxisAlignedBox();
+#define LOG(_log, ...) { printf(_log, __VA_ARGS__); }
 
-	const glm::vec4& GetCenter() const;
-	void SetCenter(const glm::vec4& a_vCenter);
-	float GetHalfWidth() const;
-	void SetHalfWidth(float a_fHalfWidth);
-	float GetHalfHeight() const;
-	void SetHalfHeight(float a_fHalfHeight);
-	float GetHalfDepth() const;
-	void SetHalfDepth(float a_fHalfDepth);
-};
-
-#endif //!_AXISALIGNEDBOX_H_
+#endif //!_LOG_H_

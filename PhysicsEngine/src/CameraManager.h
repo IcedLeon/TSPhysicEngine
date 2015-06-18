@@ -1,9 +1,9 @@
 /********************************************************************************/
-/* [File]: AxisAlignedBox.h														*/
+/* [File]: CameraManager.h														*/
 /* [Description]: */
 /* */
 /* [Author]: Tommaso Galatolo tommaso.galatolo@gmail.com						*/
-/* [Date]: 5/6/2015																*/
+/* [Date]: 12/6/2015															*/
 /* [License]:																	*/
 /* This program is free software: you can redistribute it and/or modify			*/
 /* it under the terms of the GNU Lesser General Public License as published by	*/
@@ -18,34 +18,42 @@
 /* You should have received a copy of the GNU Lesser General Public License		*/
 /* along with this program.  If not, see <http://www.gnu.org/licenses/>.		*/
 /********************************************************************************/
-#ifndef _AXISALIGNEDBOX_H_
-#define _AXISALIGNEDBOX_H_
-//Lib
-#define GLM_SWIZZLE
-#include "glm\glm\glm.hpp"
-#include "glm\glm\ext.hpp"
+#ifndef _CAMERAMANAGER_H_
+#define _CAMERAMANAGER_H_
+//Libs
+#include "MappedKeyValue.h"
+#include "Singleton.h"
+#include "QuatCamera.h"
 
-class AxisAlignedBox
+class CameraManager : public Singleton<CameraManager>
 {
-protected:
-	glm::vec4 m_vCenter;
-	float m_fHalfWidth;
-	float m_fHalfHeight;
-	float m_fHalfDepth;
-	
-public:
-	AxisAlignedBox();
-	AxisAlignedBox(const glm::vec4& a_vCenter, float a_fHalfWidth, float a_fHalfHeight, float a_fHalfDepth);
-	virtual	~AxisAlignedBox();
+	friend class Singleton<CameraManager>;
 
-	const glm::vec4& GetCenter() const;
-	void SetCenter(const glm::vec4& a_vCenter);
-	float GetHalfWidth() const;
-	void SetHalfWidth(float a_fHalfWidth);
-	float GetHalfHeight() const;
-	void SetHalfHeight(float a_fHalfHeight);
-	float GetHalfDepth() const;
-	void SetHalfDepth(float a_fHalfDepth);
+private:
+	MappedKeyValue<std::string, QuatCamera*> m_AllCameras;
+
+	MappedKeyValue<std::string, QuatCamera*> m_AllWinCameras;
+
+public:
+	static const string DEFAULT_PERSPECRIVE_CAMERA_KEY;
+	static const string DEFAULT_ORTHOGRAPHIC_CAMERA_KEY;
+
+private:
+	CameraManager();
+	virtual ~CameraManager();
+
+public:
+	const QuatCamera& GetDefaultPerspectiveCam() const;
+	
+	const QuatCamera& GetDefaultOrthoCamera() const;
+	
+	bool ContainsCamera(const std::string& a_sName) const;
+
+	const QuatCamera& GetCamera(const std::string& a_sName) const;
+
+	void SetCurrentCamera(const std::string& a_sName, const QuatCamera& a_oCamera, bool m_bWinCamera);
+	
+	void UpdateWindowViewport(const vec2& a_vViewport);
 };
 
-#endif //!_AXISALIGNEDBOX_H_
+#endif //!_CAMERAMANAGER_H_

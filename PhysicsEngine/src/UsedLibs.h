@@ -52,6 +52,8 @@ using glm::dot;
 using glm::cross;
 //GLFW
 #include <glfw\include\GLFW\glfw3.h>
+#include "Precision.h"
+using namespace TSPx;
 //Macros
 #define MAX_KEYS	1024
 
