@@ -132,9 +132,6 @@
     <ClCompile Include="src\AxisAlignedBoundingBox.cpp">
       <Filter>Source Files\Physx Engine\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="src\AxisAlignedBox.cpp">
-      <Filter>Source Files\Physx Engine\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="src\BoundingSphere.cpp">
       <Filter>Source Files\Physx Engine\Collision</Filter>
     </ClCompile>
@@ -180,6 +177,12 @@
     <ClCompile Include="src\Color.cpp">
       <Filter>Source Files\Rendering Engine\Color</Filter>
     </ClCompile>
+    <ClCompile Include="src\AxisAlignedBox.cpp">
+      <Filter>Source Files\Physx Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CoreMath.cpp">
+      <Filter>Source Files\Physx Engine\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseApplication.h">
@@ -219,9 +222,6 @@
       <Filter>Header Files\Rendering Engine\Cameras</Filter>
     </ClInclude>
     <ClInclude Include="src\AxisAlignedBoundingBox.h">
-      <Filter>Header Files\Physx Engine\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="src\AxisAlignedBox.h">
       <Filter>Header Files\Physx Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="src\BoundingSphere.h">
@@ -304,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="src\PhxParticle.h">
       <Filter>Header Files\Physx Engine\Physics Body</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AxisAlignedBox.h">
+      <Filter>Header Files\Physx Engine\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

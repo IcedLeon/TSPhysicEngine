@@ -37,6 +37,13 @@
 
 int main()
 {
+	vec3 _test1 = vec3();
+	vec3 _test2 = vec3(23, 21, 99);
+
+	float _tessst1 = _test1[1];
+
+	float _tessst2 = _test2[2];
+
 	Engine* _app = new Engine();
 
 	_app->Init(_app, vec3(0, 0, 0), ivec2(0, 720), "TEST", false);

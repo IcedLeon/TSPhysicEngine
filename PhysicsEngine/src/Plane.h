@@ -39,7 +39,7 @@ public:
 	Plane(const Plane& a_Rhs);
 	~Plane();
 
-	Plane& operator= (const Plane& a_Rhs);
+	//Plane& operator= (const Plane& a_Rhs);
 
 	void SetPlane(const Plane& a_Rhs);
 	void SetPlane(const glm::vec3 a_vNormal, float a_fD);
