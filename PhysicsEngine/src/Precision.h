@@ -48,6 +48,10 @@ namespace TSPx
 	*/
 	#define real_sqrt sqrtf
 	/*
+	Single precision inverse square root.
+	*/
+	#define real_inv_sqrt(real v) static_cast<real>(1) / real_sqrt(v)
+	/*
 	Single precision absolute magnitude operator.
 	*/
 	#define real_abs fabsf
@@ -97,6 +101,10 @@ namespace TSPx
 	Double precision square root operator.
 	*/
 	#define real_sqrt sqrt
+	/*
+	Single precision inverse square root.
+	*/
+	#define real_inv_sqrt(v) static_cast<real>(1) / real_sqrt(v)
 	/*
 	Double precision absolute magnitude operator.
 	*/

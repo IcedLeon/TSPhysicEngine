@@ -37,12 +37,12 @@
 
 int main()
 {
-	vec3 _test1 = vec3();
-	vec3 _test2 = vec3(23, 21, 99);
+	vec3 _var1(23, 12, 22);
+	vec3 _var2(43, 22, 12);
 
-	float _tessst1 = _test1[1];
+	float _test1 = glm::length((_var1 - _var2));
 
-	float _tessst2 = _test2[2];
+
 
 	Engine* _app = new Engine();
 
