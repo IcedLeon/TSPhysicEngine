@@ -416,39 +416,43 @@ namespace TSPx
 	}
 
 	/*Matrix*/
+
 	Matrix3::Matrix3()
 	{
-		for (size_t i = 0; i < 9; ++i)
-			this->_m[i] = static_cast<real>(NULL);
-
-		this->_m[0] = static_cast<real>(1);
-		this->_m[4] = static_cast<real>(1);
-		this->_m[8] = static_cast<real>(1);
+		this->_m[0] = mat_type(1, 0, 0);
+		this->_m[1] = mat_type(0, 1, 0);
+		this->_m[2] = mat_type(0, 0, 1);
 	}
 
 	Matrix3::Matrix3(const Matrix3& a_mMat)
 	{
-		for (size_t i = 0; i < 9; ++i)
-			this->_m[i] = a_mMat._m[i];
+		this->_m[0] = a_mMat._m[0];
+		this->_m[1] = a_mMat._m[1];
+		this->_m[2] = a_mMat._m[2];
 	}
 
 	Matrix3::Matrix3(const real& a_rValue)
 	{
-		for (size_t i = 0; i < 9; ++i)
-			this->_m[i] = static_cast<real>(NULL);
-
-		this->_m[0] = a_rValue;
-		this->_m[4] = a_rValue;
-		this->_m[8] = a_rValue;
+		this->_m[0] = mat_type(a_rValue, 0, 0);
+		this->_m[1] = mat_type(0, a_rValue, 0);
+		this->_m[2] = mat_type(0, 0, a_rValue);
+	}
+	
+	template<typename A>
+	Matrix3::Matrix3(const A& a_rValue)
+	{
+		this->_m[0] = mat_type(a_rValue, 0, 0);
+		this->_m[1] = mat_type(0, a_rValue, 0);
+		this->_m[2] = mat_type(0, 0, a_rValue);
 	}
 	
 	Matrix3::Matrix3(const real& a_rX0, const real& a_rY0, const real& a_rZ0,
 					 const real& a_rX1, const real& a_rY1, const real& a_rZ1,
 					 const real& a_rX2, const real& a_rY2, const real& a_rZ2)
 	{
-		this->_m[0] = a_rX0; this->_m[1] = a_rY0; this->_m[2] = a_rZ0;
-		this->_m[3] = a_rX1; this->_m[4] = a_rY1; this->_m[5] = a_rZ1;
-		this->_m[6] = a_rX2; this->_m[7] = a_rY2; this->_m[8] = a_rZ2;
+		this->_m[0] = mat_type(a_rX0, a_rY0, a_rZ0);
+		this->_m[1] = mat_type(a_rX1, a_rY1, a_rZ1);
+		this->_m[2] = mat_type(a_rX2, a_rY2, a_rZ2);
 	}
 
 	template<typename A>
@@ -456,17 +460,9 @@ namespace TSPx
 					 const A& a_rX1, const A& a_rY1, const A& a_rZ1,
 					 const A& a_rX2, const A& a_rY2, const A& a_rZ2)
 	{
-		this->_m[0] = static_cast<real>(a_rX0); 
-		this->_m[3] = static_cast<real>(a_rX1); 
-		this->_m[6] = static_cast<real>(a_rX2);
-
-		this->_m[1] = static_cast<real>(a_rY0);
-		this->_m[4] = static_cast<real>(a_rY1);
-		this->_m[7] = static_cast<real>(a_rY2);
-		
-		this->_m[2] = static_cast<real>(a_rZ0);
-		this->_m[5] = static_cast<real>(a_rZ1);
-		this->_m[8] = static_cast<real>(a_rZ2);
+		this->_m[0] = mat_type(a_rX0, a_rY0, a_rZ0);
+		this->_m[1] = mat_type(a_rX1, a_rY1, a_rZ1);
+		this->_m[2] = mat_type(a_rX2, a_rY2, a_rZ2);
 	}
 
 	template<typename A, typename B, typename C>
@@ -474,17 +470,9 @@ namespace TSPx
 					 const A& a_rX1, const B& a_rY1, const C& a_rZ1,
 					 const A& a_rX2, const B& a_rY2, const C& a_rZ2)
 	{
-		this->_m[0] = static_cast<real>(a_rX0);
-		this->_m[3] = static_cast<real>(a_rX1);
-		this->_m[6] = static_cast<real>(a_rX2);
-
-		this->_m[1] = static_cast<real>(a_rY0);
-		this->_m[4] = static_cast<real>(a_rY1);
-		this->_m[7] = static_cast<real>(a_rY2);
-
-		this->_m[2] = static_cast<real>(a_rZ0);
-		this->_m[5] = static_cast<real>(a_rZ1);
-		this->_m[8] = static_cast<real>(a_rZ2);
+		this->_m[0] = mat_type(a_rX0, a_rY0, a_rZ0);
+		this->_m[1] = mat_type(a_rX1, a_rY1, a_rZ1);
+		this->_m[2] = mat_type(a_rX2, a_rY2, a_rZ2);
 	}
 	
 		template<typename A0, typename B0, typename C0,
@@ -494,33 +482,23 @@ namespace TSPx
 						 const A1& a_rX1, const B1& a_rY1, const C1& a_rZ1,
 						 const A2& a_rX2, const B2& a_rY2, const C2& a_rZ2)
 		{
-			this->_m[0] = static_cast<real>(a_rX0);
-			this->_m[3] = static_cast<real>(a_rX1);
-			this->_m[6] = static_cast<real>(a_rX2);
-
-			this->_m[1] = static_cast<real>(a_rY0);
-			this->_m[4] = static_cast<real>(a_rY1);
-			this->_m[7] = static_cast<real>(a_rY2);
-
-			this->_m[2] = static_cast<real>(a_rZ0);
-			this->_m[5] = static_cast<real>(a_rZ1);
-			this->_m[8] = static_cast<real>(a_rZ2);
+			this->_m[0] = mat_type(a_rX0, a_rY0, a_rZ0);
+			this->_m[1] = mat_type(a_rX1, a_rY1, a_rZ1);
+			this->_m[2] = mat_type(a_rX2, a_rY2, a_rZ2);
 		}
 
 		Matrix3::Matrix3(const Vec3& a_vVector0, const Vec3& a_vVector1, const Vec3& a_vVector2)
 		{
-			this->_m[0] = a_vVector0._x; this->_m[1] = a_vVector0._y; this->_m[2] = a_vVector0._z;
-			this->_m[3] = a_vVector1._x; this->_m[4] = a_vVector1._y; this->_m[5] = a_vVector1._z;
-			this->_m[6] = a_vVector2._x; this->_m[7] = a_vVector2._y; this->_m[8] = a_vVector2._z;
+			this->_m[0] = a_vVector0;
+			this->_m[1] = a_vVector1;
+			this->_m[2] = a_vVector2;
 		}
 
 		Matrix3::Matrix3(const vec3& a_glmVec0, const vec3& a_glmVec1, const vec3& a_glmVec2)
 		{
-			Vec3 _tmp0(a_glmVec0);
-			Vec3 _tmp1(a_glmVec1);
-			Vec3 _tmp2(a_glmVec2);
-
-			*this = Matrix3(_tmp0, _tmp1, _tmp2);
+			this->_m[0] = Vec3(a_glmVec0);
+			this->_m[1] = Vec3(a_glmVec1);
+			this->_m[2] = Vec3(a_glmVec2);
 		}
 
 		Matrix3::~Matrix3()
@@ -529,7 +507,7 @@ namespace TSPx
 
 		size_t Matrix3::Size() const
 		{
-			return 9;
+			return 3;
 		}
 
 		Matrix3::mat_type& Matrix3::operator[](size_t a_idx)
@@ -546,40 +524,45 @@ namespace TSPx
 
 		Matrix3& Matrix3::operator=(const Matrix3& a_mMat)
 		{
-			for (size_t i = 0; i < 9; ++i)
-				this->_m[i] = a_mMat._m[i];
+			this->_m[0] = a_mMat._m[0];
+			this->_m[1] = a_mMat._m[1];
+			this->_m[2] = a_mMat._m[2];
 
 			return *this;
 		}
 				 
 		Matrix3& Matrix3::operator+=(const Matrix3& a_mMat)
 		{
-			for (size_t i = 0; i < 9; ++i)
-				this->_m[i] += a_mMat._m[i];
+			this->_m[0] += a_mMat._m[0];
+			this->_m[1] += a_mMat._m[1];
+			this->_m[2] += a_mMat._m[2];
 
 			return *this;
 		}
 
 		Matrix3& Matrix3::operator+=(real a_Value)
 		{
-			for (size_t i = 0; i < 9; ++i)
-				this->_m[i] += a_Value;
+			this->_m[0] += a_Value;
+			this->_m[1] += a_Value;
+			this->_m[2] += a_Value;
 
 			return *this;
 		}
 				 
 		Matrix3& Matrix3::operator-=(const Matrix3& a_mMat)
 		{
-			for (size_t i = 0; i < 9; ++i)
-				this->_m[i] -= a_mMat._m[i];
+			this->_m[0] -= a_mMat._m[0];
+			this->_m[1] -= a_mMat._m[1];
+			this->_m[2] -= a_mMat._m[2];
 
 			return *this;
 		}
 
 		Matrix3& Matrix3::operator-=(real a_Value)
 		{
-			for (size_t i = 0; i < 9; ++i)
-				this->_m[i] -= a_Value;
+			this->_m[0] -= a_Value;
+			this->_m[1] -= a_Value;
+			this->_m[2] -= a_Value;
 
 			return *this;
 		}
@@ -591,8 +574,9 @@ namespace TSPx
 
 		Matrix3& Matrix3::operator*=(real a_Value)
 		{
-			for (size_t i = 0; i < 9; ++i)
-				this->_m[i] *= a_Value;
+			this->_m[0] *= a_Value;
+			this->_m[1] *= a_Value;
+			this->_m[2] *= a_Value;
 
 			return *this;
 		}
@@ -604,70 +588,75 @@ namespace TSPx
 
 		Matrix3& Matrix3::operator/=(real a_Value)
 		{
-			for (size_t i = 0; i < 9; ++i)
-				this->_m[i] /= a_Value;
+			this->_m[0] /= a_Value;
+			this->_m[1] /= a_Value;
+			this->_m[2] /= a_Value;
 
 			return *this;
 		}
 
 		Matrix3& Matrix3::operator++()
 		{
-			for (size_t i = 0; i < 9; ++i)
-				++this->_m[i];
+			++this->_m[0];
+			++this->_m[1];
+			++this->_m[2];
 
 			return *this;
 		}
 
 		Matrix3& Matrix3::operator--()
 		{
-			for (size_t i = 0; i < 9; ++i)
-				--this->_m[i];
+			--this->_m[0];
+			--this->_m[1];
+			--this->_m[2];
 
 			return *this;
 		}
 		
+		Matrix3 Matrix3::operator-() const
+		{
+			return Matrix3(-this->_m[0], -this->_m[1], -this->_m[2]);
+		}
 
 		Matrix3 Matrix3::operator+(const Matrix3& a_mMat) const
 		{
-			Matrix3 _toReturn(0);
-
-			for (size_t i = 0; i < 9; ++i)
-				_toReturn._m[i] = this->_m[i] + a_mMat._m[i];
+			Matrix3 _toReturn(this->_m[0] + a_mMat._m[0],
+							  this->_m[1] + a_mMat._m[1],
+							  this->_m[2] + a_mMat._m[2]);
 
 			return _toReturn;
 		}
 
 		Matrix3 Matrix3::operator-(const Matrix3& a_mMat) const
 		{
-			Matrix3 _toReturn(0);
-
-			for (size_t i = 0; i < 9; ++i)
-				_toReturn._m[i] = this->_m[i] - a_mMat._m[i];
+			Matrix3 _toReturn(this->_m[0] - a_mMat._m[0],
+							  this->_m[1] - a_mMat._m[1],
+							  this->_m[2] - a_mMat._m[2]);
 
 			return _toReturn;
 		}
 
 		Matrix3 Matrix3::operator*(const Matrix3& a_mMat) const
 		{
-			real const SrcA00 = this->_m[0];
-			real const SrcA01 = this->_m[1];
-			real const SrcA02 = this->_m[2];
-			real const SrcA10 = this->_m[3];
-			real const SrcA11 = this->_m[4];
-			real const SrcA12 = this->_m[5];
-			real const SrcA20 = this->_m[6];
-			real const SrcA21 = this->_m[7];
-			real const SrcA22 = this->_m[8];
+			real const SrcA00 = this->_m[0][0];
+			real const SrcA01 = this->_m[0][1];
+			real const SrcA02 = this->_m[0][2];
+			real const SrcA10 = this->_m[1][0];
+			real const SrcA11 = this->_m[1][1];
+			real const SrcA12 = this->_m[1][2];
+			real const SrcA20 = this->_m[2][0];
+			real const SrcA21 = this->_m[2][1];
+			real const SrcA22 = this->_m[2][2];
 
-			real const SrcB00 = a_mMat._m[0];
-			real const SrcB01 = a_mMat._m[1];
-			real const SrcB02 = a_mMat._m[2];
-			real const SrcB10 = a_mMat._m[3];
-			real const SrcB11 = a_mMat._m[4];
-			real const SrcB12 = a_mMat._m[5];
-			real const SrcB20 = a_mMat._m[6];
-			real const SrcB21 = a_mMat._m[7];
-			real const SrcB22 = a_mMat._m[8];
+			real const SrcB00 = a_mMat._m[0][0];
+			real const SrcB01 = a_mMat._m[0][1];
+			real const SrcB02 = a_mMat._m[0][2];
+			real const SrcB10 = a_mMat._m[1][0];
+			real const SrcB11 = a_mMat._m[1][1];
+			real const SrcB12 = a_mMat._m[1][2];
+			real const SrcB20 = a_mMat._m[2][0];
+			real const SrcB21 = a_mMat._m[2][1];
+			real const SrcB22 = a_mMat._m[2][2];
 
 			Matrix3 _toReturn(0);
 			_toReturn._m[0] = SrcA00 * SrcB00 + SrcA10 * SrcB01 + SrcA20 * SrcB02;
@@ -688,6 +677,11 @@ namespace TSPx
 			Matrix3 _tmp(*this);
 
 			return _tmp /= a_mMat;
+		}
+
+		Matrix3 Matrix3::CreateIdentity() const
+		{
+			return Matrix3(1);
 		}
 
 		void Matrix3::SetInertiaTensorCoeff(real a_rIX0, real a_rIY0, real a_rIZ0,
@@ -736,72 +730,112 @@ namespace TSPx
 		{
 			ComputeInverse(*this);
 		}
-
-		void Matrix3::SetTranspose(const Matrix3& a_mMat)
-		{
-			this->_m[0]	= a_mMat._m[0];
-			this->_m[1]	= a_mMat._m[3];
-			this->_m[2]	= a_mMat._m[6];
-			this->_m[3]	= a_mMat._m[1];
-			this->_m[4] = a_mMat._m[4];
-			this->_m[5]	= a_mMat._m[7];
-			this->_m[6]	= a_mMat._m[1];
-			this->_m[7] = a_mMat._m[5];
-			this->_m[8] = a_mMat._m[8];
-		}
-				
+						
 		Matrix3 Matrix3::Transpose() const
 		{
-			Matrix3 _toReturn(0);
-			_toReturn.SetTranspose(*this);
-			return _toReturn;
+
+			const Vec3 v0(this->_m[0]._x, this->_m[1]._x, this->_m[2]._z);
+			const Vec3 v1(this->_m[0]._y, this->_m[1]._y, this->_m[2]._y);
+			const Vec3 v2(this->_m[0]._y, this->_m[1]._y, this->_m[2]._y);
+			
+			return Matrix3(v0, v1, v2);
 		}
 
 		real Matrix3::GetDeterminant() const
 		{
-			real _t4  = this->_m[0] * this->_m[4];
-			real _t6  = this->_m[0] * this->_m[5];
-			real _t8  = this->_m[1] * this->_m[3];
-			real _t10 = this->_m[2] * this->_m[3];
-			real _t12 = this->_m[1] * this->_m[6];
-			real _t14 = this->_m[2] * this->_m[6];
-
-			real _t16 = _t4  * this->_m[8] - 
-						_t6  * this->_m[7] -
-						_t8  * this->_m[8] + 
-						_t10 * this->_m[7] + 
-						_t12 * this->_m[5] -
-						_t14 * this->_m[4];
-
-			return _t16;
+			return this->_m[0].Dot(this->_m[1].Cross(this->_m[2]));
 		}
 
-		Matrix3 operator+(const Matrix3& a_vVector, const real& a_rValue)
+		Matrix3 operator+(const Matrix3& a_mMat, const real& a_rValue)
 		{
-			//here
+			Matrix3 _result = a_mMat + a_rValue;
+			return _result;
 		}
 
-		Matrix3 operator+(const real& a_rValue, const Matrix3& a_vVector)
+		Matrix3 operator+(const real& a_rValue, const Matrix3& a_mMat)
 		{
-
+			Matrix3 _result = a_mMat + a_rValue;
+			return _result;
+		}
+		
+		Matrix3 operator-(const Matrix3& a_mMat, const real& a_rValue)
+		{
+			Matrix3 _result = a_mMat - a_rValue;
 		}
 
-		Matrix3 ComputeInverse(const Matrix3& a_mMat)
+		Matrix3 operator-(const real& a_rValue, const Matrix3& a_mMat)
 		{
-			real _oneOverDeterminant = static_cast<real>(1) / a_mMat.GetDeterminant();
+			Matrix3 _result(0);
 
-			Matrix3 _inverse(0);
+			for (size_t i = 0; i < a_mMat.Size(); ++i)
+				_result._m[i] = a_rValue - a_mMat._m[i];
+			
+			return _result;
+		}
+		
+		Matrix3 operator*(const Matrix3& a_mMat, const real& a_rValue)
+		{
+			Matrix3 _result = a_mMat * a_rValue;
+			return _result;
+		}
 
-			_inverse._m[0] = +(a_mMat._m[4] * a_mMat._m[8] - a_mMat._m[7] * a_mMat[5]) * _oneOverDeterminant;
-			_inverse._m[1] = -(a_mMat._m[3] * a_mMat._m[8] - a_mMat._m[6] * a_mMat[5]) * _oneOverDeterminant;
-			_inverse._m[2] = +(a_mMat._m[3] * a_mMat._m[7] - a_mMat._m[6] * a_mMat[4]) * _oneOverDeterminant;
-			_inverse._m[3] = -(a_mMat._m[1] * a_mMat._m[8] - a_mMat._m[7] * a_mMat[3]) * _oneOverDeterminant;
-			_inverse._m[4] = +(a_mMat._m[0] * a_mMat._m[8] - a_mMat._m[6] * a_mMat[3]) * _oneOverDeterminant;
-			_inverse._m[5] = -(a_mMat._m[0] * a_mMat._m[7] - a_mMat._m[6] * a_mMat[1]) * _oneOverDeterminant;
-			_inverse._m[6] = +(a_mMat._m[1] * a_mMat._m[5] - a_mMat._m[4] * a_mMat[3]) * _oneOverDeterminant;
-			_inverse._m[7] = -(a_mMat._m[0] * a_mMat._m[5] - a_mMat._m[3] * a_mMat[3]) * _oneOverDeterminant;
-			_inverse._m[8] = +(a_mMat._m[0] * a_mMat._m[4] - a_mMat._m[3] * a_mMat[1]) * _oneOverDeterminant;
+		Matrix3 operator*(const real& a_rValue, const Matrix3& a_mMat)
+		{
+			Matrix3 _result = a_mMat * a_rValue;
+			return _result;
+		}
 
-			return _inverse;
+		Vec3 operator*(const Matrix3& a_mMat, const Vec3& a_vVector)
+		{
+			return Vec3(a_mMat._m[0] * a_vVector._x + a_mMat[3] * a_vVector._y + a_mMat[6] * a_vVector._z,
+				a_mMat._m[1] * a_vVector._x + a_mMat[4] * a_vVector._y + a_mMat[7] * a_vVector._z,
+				a_mMat._m[2] * a_vVector._x + a_mMat[5] * a_vVector._y + a_mMat[8] * a_vVector._z);
+		}
+
+		Vec3 operator*(const Vec3& a_vVector, const Matrix3& a_glmVec)
+		{
+		}
+
+		vec3 operator*(const Matrix3& a_mMat, const vec3& a_glmVec)
+		{
+		}
+		
+		vec3 operator*(const vec3& a_glmVec, const Matrix3& a_mMat)
+		{
+		}
+
+		Matrix3 Matrix3::ComputeInverse(const Matrix3& a_mMat)
+		{
+			real _determinant = a_mMat.GetDeterminant();
+
+			if (_determinant != 0)
+			{
+				Matrix3 _inverse(0);
+
+				real _oneOverDeterminant = static_cast<real>(1) / _determinant;
+
+				_inverse._m[0] = _oneOverDeterminant *  (a_mMat._m[1] * a_mMat._m[2] - a_mMat._m[1] * a_mMat[2]);
+				_inverse._m[1] = _oneOverDeterminant * -(a_mMat._m[1] * a_mMat._m[2] - a_mMat._m[1] * a_mMat[2]);
+				_inverse._m[2] = _oneOverDeterminant *  (a_mMat._m[1] * a_mMat._m[2] - a_mMat._m[2] * a_mMat[1]);
+													 
+				_inverse._m[0] = _oneOverDeterminant * -(a_mMat._m[0] * a_mMat._m[2] - a_mMat._m[2] * a_mMat[0]);
+				_inverse._m[1] = _oneOverDeterminant *  (a_mMat._m[0] * a_mMat._m[2] - a_mMat._m[2] * a_mMat[0]);
+				_inverse._m[2] = _oneOverDeterminant * -(a_mMat._m[0] * a_mMat._m[2] - a_mMat._m[2] * a_mMat[0]);
+													 
+				_inverse._m[0] = _oneOverDeterminant *  (a_mMat._m[0] * a_mMat._m[1] - a_mMat._m[1] * a_mMat[0]);
+				_inverse._m[1] = _oneOverDeterminant * -(a_mMat._m[0] * a_mMat._m[1] - a_mMat._m[1] * a_mMat[0]);
+				_inverse._m[2] = _oneOverDeterminant *  (a_mMat._m[0] * a_mMat._m[1] - a_mMat._m[0] * a_mMat[1]);
+
+				return _inverse;
+			}
+			else
+			{
+				return CreateIdentity();
+			}
+		}
+
+		static Matrix3 LinearInterpolation(const Matrix3& a_mMat0, const Matrix3& a_mMat1, real a_rProp)
+		{
+
 		}
 }

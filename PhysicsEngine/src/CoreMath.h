@@ -1,7 +1,7 @@
 /********************************************************************************/
-/* [File]: CoreMath.h														*/
-/* [Description]: */
-/* */
+/* [File]: CoreMath.h															*/
+/* [Description]: Core Math is a collection of mathematical funtions targeted	*/
+/* especially for physic simulation and to ensure that word alignement is		*/
 /* [Author]: Tommaso Galatolo tommaso.galatolo@gmail.com						*/
 /* [Date]: 5/6/2015																*/
 /* [License]:																	*/
@@ -188,6 +188,9 @@ namespace TSPx
 	Vec3 operator/(const Vec3& a_vVector, const vec3& a_glmVec);
 	Vec3 operator/(const vec3& a_glmVec, const Vec3& a_vVector);
 
+	const static Vec3 _GRAVITY_(0, -9.81, 0);
+	const static Vec3 _HIGH_GRAVITY_(0, -19.62, 0);
+
 	/*Other useful geometric functions*/
 	
 	/*
@@ -198,10 +201,10 @@ namespace TSPx
 
 	class Matrix3
 	{
-		typedef real mat_type;
+		typedef Vec3 mat_type;
 
 	public:
-		mat_type _m[9];
+		mat_type _m[3];
 
 		/*Ctors*/
 
@@ -210,6 +213,9 @@ namespace TSPx
 		Matrix3(const Matrix3& a_mMat);
 
 		Matrix3(const real& a_rValue);
+		
+		template<typename A>
+		Matrix3(const A& a_rValue);
 
 		Matrix3(const real& a_rX0, const real& a_rY0, const real& a_rZ0,
 				const real& a_rX1, const real& a_rY1, const real& a_rZ1,
@@ -269,13 +275,16 @@ namespace TSPx
 		Matrix3& operator--();
 
 		/*Arithmetic operators*/
-
+		
+		Matrix3 operator-() const;
 		Matrix3 operator+(const Matrix3& a_mMat) const;
 		Matrix3 operator-(const Matrix3& a_mMat) const;
 		Matrix3 operator*(const Matrix3& a_mMat) const;
 		Matrix3 operator/(const Matrix3& a_mMat) const;
 
 		/*Other Matrix3 functions*/
+
+		Matrix3 CreateIdentity() const;
 
 		/*
 		This function would initialise the matrix with the 
@@ -308,46 +317,42 @@ namespace TSPx
 		*/
 		void Invert();
 		/*
-		Set this matrix to be transposed to the given one.
-		*/
-		void SetTranspose(const Matrix3& a_mMat);
-		/*
 		Returns a new transposed matrix containing the transposed of this matrix.
 		*/
 		Matrix3 Transpose() const;
 		/*
+		Return the determinant of this matrix.
 		*/
-		real GetDeterminant() const;
+		real GetDeterminant() const;		
+		/*
+		Returns a new matrix set to the inverse of the given one.
+		*/
+		Matrix3 ComputeInverse(const Matrix3& a_mMat);
 	};
 
-	Matrix3 operator+(const Matrix3& a_vVector, const real& a_rValue);
+	Matrix3 operator+(const Matrix3& a_mMat, const real& a_rValue);
 	Matrix3 operator+(const real& a_rValue, const Matrix3& a_vVector);
 
-	Matrix3 operator-(const Matrix3& a_vVector, const real& a_rValue);
+	Matrix3 operator-(const Matrix3& a_mMat, const real& a_rValue);
 	Matrix3 operator-(const real& a_rValue, const Matrix3& a_vVector);
 
-	Matrix3 operator*(const Matrix3& a_vVector, const real& a_rValue);
-	Matrix3 operator*(const real& a_rValue, const Matrix3& a_vVector);
+	Matrix3 operator*(const Matrix3& a_mMat, const real& a_rValue);
+	Matrix3 operator*(const real& a_rValue, const Matrix3& a_mMat);
 
-	Vec3 operator*(const Matrix3& a_vVector, const Vec3& a_glmVec);
-	Vec3 operator*(const Vec3& a_vVector, const Matrix3& a_glmVec);
+	Vec3 operator*(const Matrix3& a_mMat, const Vec3& a_vVector);
+	Vec3 operator*(const Vec3& a_vVector, const Matrix3& a_mMat);
 
-	vec3 operator*(const Matrix3& a_glmVec, const vec3& a_vVector);
-	vec3 operator*(const vec3& a_glmVec, const Matrix3& a_vVector);
+	vec3 operator*(const Matrix3& a_mMat, const vec3& a_glmVec);
+	vec3 operator*(const vec3& a_glmVec, const Matrix3& a_mMat);
 
-	Matrix3 operator/(const Matrix3& a_vVector, const real& a_rValue);
-	Matrix3 operator/(const real& a_rValue, const Matrix3& a_vVector);
+	Matrix3 operator/(const Matrix3& a_mMat, const real& a_rValue);
+	Matrix3 operator/(const real& a_rValue, const Matrix3& a_mMat);
 
-	Vec3 operator/(const Matrix3& a_vVector, const Vec3& a_glmVec);
-	Vec3 operator/(const Vec3& a_vVector, const Matrix3& a_glmVec);
+	Vec3 operator/(const Matrix3& a_mMat, const Vec3& a_vVector);
+	Vec3 operator/(const Vec3& a_vVector, const Matrix3& a_mMat);
 
-	vec3 operator/(const Matrix3& a_glmVec, const vec3& a_vVector);
-	vec3 operator/(const vec3& a_glmVec, const Matrix3& a_vVector);
-
-	/*
-	Returns a new matrix set to the inverse of the given one.
-	*/
-	Matrix3 ComputeInverse(const Matrix3& a_mMat);
+	vec3 operator/(const Matrix3& a_mMat, const vec3& a_glmVec);
+	vec3 operator/(const vec3& a_glmVec, const Matrix3& a_mMat);
 
 	static Matrix3 LinearInterpolation(const Matrix3& a_mMat0, const Matrix3& a_mMat1, real a_rProp);
 }
